@@ -201,7 +201,7 @@ void Algoritmos::BucketSort()
 			}
 		}
 		pg1->Value = clr;
-		if (clr % 2048 == 0) destpic->Refresh();
+		if (clr % w1 == 0) destpic->Refresh();
 
 	}
 }
@@ -215,6 +215,8 @@ void Algoritmos::BubbleSort()
 
 	unsigned int x, y;
 	unsigned int t;
+
+	ArrayItem^ tmp;
 
 	h1 = bmp2->Height;
 	w1 = bmp2->Width;
@@ -250,11 +252,9 @@ void Algoritmos::BubbleSort()
 		{
 			if (item[j]->cinza > item[j + 1]->cinza)
 			{
-				//swap(&item[j], &item[j + 1]);
-				ArrayItem^ tmp;
-				tmp = gcnew ArrayItem(item[j]);
-				item[j] = gcnew ArrayItem(item[j + 1]);
-				item[j + 1] = gcnew ArrayItem(tmp);
+				tmp = item[j];
+				item[j] = item[j + 1];
+				item[j + 1] = tmp;
 
 				bmp2->SetPixel(x1[j], y1[j], c.FromArgb(item[j]->getR(), item[j]->getG(), item[j]->getB()));
 				bmp2->SetPixel(x1[j + 1], y1[j + 1], c.FromArgb(item[j + 1]->getR(), item[j + 1]->getG(), item[j + 1]->getB()));
@@ -297,7 +297,7 @@ void Algoritmos::OptimizedBubble()
 		x1[i] = x;
 		y1[i] = y;
 
-		bmp2->SetPixel(x, y, c.FromArgb(item[i]->cinza2, item[i]->cinza2, item[i]->cinza2));
+		bmp2->SetPixel(x, y, c.FromArgb(item[i]->getR(), item[i]->getG(), item[i]->getB()));
 		pg1->Value = i;
 		if (i % w1 == 0) destpic->Refresh();
 	}
@@ -306,7 +306,7 @@ void Algoritmos::OptimizedBubble()
 	{
 		min = 255 * 255 * 255;
 		max = 0;
-		pg2->Value = hi;
+		
 
 		for (i = lo; i < hi + 1; i++)
 		{
@@ -320,28 +320,32 @@ void Algoritmos::OptimizedBubble()
 				min = item[i]->cinza;
 				min_idx = i;
 			}
-			pg1->Value = i;
+			pg1->Value = lo;
+			pg2->Value = hi;
 
 
 		}
-		tmp = gcnew ArrayItem(item[min_idx]);
-		item[min_idx] = gcnew ArrayItem(item[lo]);
-		item[lo] = gcnew ArrayItem(tmp);
+		tmp = item[min_idx];
+		item[min_idx] = item[lo];
+		item[lo] = tmp;
 
-		tmp = gcnew ArrayItem(item[max_idx]);
-		item[max_idx] = gcnew ArrayItem(item[hi]);
-		item[hi] = gcnew ArrayItem(tmp);
+		tmp = item[max_idx];
+		item[max_idx] = item[hi];
+		item[hi] = tmp;
 
 		bmp2->SetPixel(x1[min_idx], y1[min_idx], c.FromArgb(item[min_idx]->getR(), item[min_idx]->getG(), item[min_idx]->getB()));
 		bmp2->SetPixel(x1[max_idx], y1[max_idx], c.FromArgb(item[max_idx]->getR(), item[max_idx]->getG(), item[max_idx]->getB()));
 		bmp2->SetPixel(x1[lo], y1[lo], c.FromArgb(item[lo]->getR(), item[lo]->getG(), item[lo]->getB()));
 		bmp2->SetPixel(x1[hi], y1[hi], c.FromArgb(item[hi]->getR(), item[hi]->getG(), item[hi]->getB()));
-		destpic->Refresh();
+		if (lo % w1 == 0)  destpic->Refresh();
 		lo++;
 		hi--;
 
-		txtbx->Text = lo.ToString() + "-" + hi.ToString() + "|" + min.ToString() + "-" + max.ToString() + "|" + min_idx.ToString() + "-" + max_idx.ToString();
-		txtbx->Refresh();
+		if (lo % w1 == 0)
+		{
+			txtbx->Text = lo.ToString() + "-" + hi.ToString() + "|" + min.ToString() + "-" + max.ToString() + "|" + min_idx.ToString() + "-" + max_idx.ToString();
+			txtbx->Refresh();
+		}
 		min_idx = lo;
 		max_idx = hi;
 	}
@@ -387,7 +391,7 @@ void Algoritmos::CocktailSort()
 		y1[i] = y;
 
 		//bmp2->SetPixel(x, y, c.FromArgb(item[i]->getR(), item[i]->getG(), item[i]->getB()));
-		bmp2->SetPixel(x, y, c.FromArgb(item[i]->cinza2, item[i]->cinza2, item[i]->cinza2));
+		bmp2->SetPixel(x, y, c.FromArgb(item[i]->getR(), item[i]->getG(), item[i]->getB()));
 		pg1->Value = i;
 		if (i % w1 == 0) destpic->Refresh();
 	}
@@ -398,9 +402,9 @@ void Algoritmos::CocktailSort()
 		{
 			if (item[i - 1]->cinza > item[i]->cinza)
 			{
-				tmp = gcnew ArrayItem(item[i]);
-				item[i] = gcnew ArrayItem(item[i - 1]);
-				item[i - 1] = gcnew ArrayItem(tmp);
+				tmp = item[i];
+				item[i] = item[i - 1];
+				item[i - 1] = tmp;
 				mov = i;
 				bmp2->SetPixel(x1[i], y1[i], c.FromArgb(item[i]->getR(), item[i]->getG(), item[i]->getB()));
 				bmp2->SetPixel(x1[i - 1], y1[i - 1], c.FromArgb(item[i - 1]->getR(), item[i - 1]->getG(), item[i - 1]->getB()));
@@ -414,9 +418,9 @@ void Algoritmos::CocktailSort()
 		{
 			if (item[i]->cinza > item[i + 1]->cinza)
 			{
-				tmp = gcnew ArrayItem(item[i]);
-				item[i] = gcnew ArrayItem(item[i + 1]);
-				item[i + 1] = gcnew ArrayItem(tmp);
+				tmp = item[i];
+				item[i] = item[i + 1];
+				item[i + 1] = tmp;
 				mov = i;
 				bmp2->SetPixel(x1[i], y1[i], c.FromArgb(item[i]->getR(), item[i]->getG(), item[i]->getB()));
 				bmp2->SetPixel(x1[i + 1], y1[i + 1], c.FromArgb(item[i + 1]->getR(), item[i + 1]->getG(), item[i + 1]->getB()));
